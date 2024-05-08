@@ -1,5 +1,5 @@
 provider "aws" {
-  region = var.aws_region 
+  region = var.aws_region
 }
 
 module "vpc" {
@@ -15,6 +15,18 @@ module "vpc" {
 
   enable_nat_gateway = true
   enable_vpn_gateway = true
+
+  public_subnet_tags = {
+    "kubernates.io/cluster/hello" = "shared"
+    "kubernates.io/role/elb"      = 1
+  }
+
+  private_subnet_tags = {
+    "kubernates.io/cluster/hello"     = "shared"
+    "kubernates.io/role/internal-elb" = 1
+  }
+
+  tags = { "kubernates.io/cluster/hello" = "shared" }
 }
 
 module "eks" {
